@@ -18,12 +18,9 @@ class App(Tk):
         self.names = {}
         self.filepath = "names.txt"
         namesraw = []
-        with open(self.filepath) as fp:
-            line = fp.readline()
-            while line:
-                namesraw.append(line.strip())
-                line = fp.readline()
-        fp.close()
+        with open(self.filepath, "r") as f:
+            namesraw = [line.strip() for line in f if line.strip()]
+        f.close()
 
         for name in namesraw:
             self.names[name] = self.isPlayerOnline(name)
@@ -140,15 +137,28 @@ class App(Tk):
     def deleteName(self, entry):
         self.stop()
         try:
-            a_file = open(self.filepath, "r")
-            lines = a_file.readlines()
-            a_file.close()
+            if entry in self.names:
+                del self.names[entry]
+                for lab in self.labels:
+                    if lab["text"].split(' ', 1)[0] == entry:
+                        lab.destroy()
+                        self.labels.remove(lab)
 
-            new_file = open(self.filepath, "w")
-            for line in lines:
-                if line.strip("\n") != entry:
-                    new_file.write(line)
-            new_file.close()
+                with open(self.filepath, "r") as f:
+                    lines = [line.strip() for line in f if line.strip()]
+                f.close()
+
+                lines.remove(entry)
+
+                new_file = open(self.filepath, "w")
+                for x, line in enumerate(lines):
+                    if x == 0:
+                        new_file.write(line)
+                    else:
+                        new_file.write("\n"+line)
+
+
+                new_file.close()
         except Exception:
             pass
         self.play()
@@ -157,7 +167,6 @@ class App(Tk):
         if messagebox.askokcancel("Quit", "Are you sure you want to quit now?"):
             self.destroy()
             exit(0)
-
 
 
 
