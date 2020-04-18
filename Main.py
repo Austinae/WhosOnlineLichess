@@ -1,14 +1,17 @@
 from threading import Thread
 from time import sleep
-from tkinter import Button, Label, Tk, Entry
+from tkinter import Button, Label, Tk, Entry, messagebox
 from requests import get
 from bs4 import BeautifulSoup
 from playsound import playsound
+from sys import exit
 
 class App(Tk):
 
     def __init__(self):
         Tk.__init__(self)
+
+        self.protocol("WM_DELETE_WINDOW", self.askquit)
 
         self.refreshRate = 3
 
@@ -128,6 +131,12 @@ class App(Tk):
         except Exception:
             pass
         self.play()
+
+    def askquit(self):
+        if messagebox.askokcancel("Quit", "Are you sure you want to quit now?"):
+            self.destroy()
+            exit(0)
+
 
 
 App().mainloop()
