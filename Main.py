@@ -42,6 +42,11 @@ class App(Tk):
         self.button = Button(self, text="Add Name", command=lambda: self.addName(self.entry.get()))
         self.button.pack(side="bottom", fill="x")
 
+        self.entry2 = Entry(self)
+        self.entry2.pack(side="bottom", fill="x")
+        self.button2 = Button(self, text="Delete Name", command=lambda: self.deleteName(self.entry2.get()))
+        self.button2.pack(side="bottom", fill="x")
+
         self.title("Lichess Friends Activity")
         self.geometry("500x800+300+100")
 
@@ -132,10 +137,27 @@ class App(Tk):
             pass
         self.play()
 
+    def deleteName(self, entry):
+        self.stop()
+        try:
+            a_file = open(self.filepath, "r")
+            lines = a_file.readlines()
+            a_file.close()
+
+            new_file = open(self.filepath, "w")
+            for line in lines:
+                if line.strip("\n") != entry:
+                    new_file.write(line)
+            new_file.close()
+        except Exception:
+            pass
+        self.play()
+
     def askquit(self):
         if messagebox.askokcancel("Quit", "Are you sure you want to quit now?"):
             self.destroy()
             exit(0)
+
 
 
 
