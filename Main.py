@@ -11,6 +11,8 @@ class App(Tk):
     def __init__(self):
         Tk.__init__(self)
 
+        self.iconbitmap(r'favicon.ico')
+
         self.protocol("WM_DELETE_WINDOW", self.askquit)
 
         self.refreshRate = 3
